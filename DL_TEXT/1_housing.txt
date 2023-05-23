@@ -1,0 +1,79 @@
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# Load the Boston Housing Price Prediction dataset
+column_names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
+boston = pd.read_csv('./housing.csv', delimiter=r"\s+",header=None, names=column_names)
+boston.head()
+
+
+print(boston.shape)
+boston.isnull().sum()
+boston.describe()
+boston.info()
+
+
+#visualiation
+
+import seaborn as sns
+sns.distplot(boston.MEDV)
+
+sns.boxplot(boston.MEDV)
+
+
+import matplotlib.pyplot as plt
+plt.figure(figsize = (20,5))
+features = ['LSTAT','RM','PTRATIO']
+for i, col in enumerate(features):
+    plt.subplot(1, len(features) , i+1)
+    x = boston[col]
+    y = boston.MEDV
+    plt.scatter(x, y, marker='o')
+    plt.title("Variation in House prices")
+    plt.xlabel(col)
+    plt.ylabel('"House prices in $1000"')
+
+
+#Splitting the dependent feature and independent feature
+X = boston.iloc[:, :-1].values
+y = boston.iloc[:, -1].values
+
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#model = tf.keras.Sequential([
+#    tf.keras.layers.Dense(units=10, input_shape=(X_train.shape[1],), activation='relu'),
+#    tf.keras.layers.Dense(units=1)
+#])
+from keras.models import Sequential
+from keras.layers import Dense,Dropout
+model = Sequential()
+model.add(Dense(units=10, input_shape=(X_train.shape[1],), activation='relu'))
+model.add(Dense(units=1))
+
+# Compile the model
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01), loss='mean_squared_error')
+
+
+
+# Train the model
+#history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, epochs=100,validation_split=0.1)
+
+# Evaluate the performance of the model on the test data
+mse = model.evaluate(X_test, y_test, verbose=0)
+print(f'Test Mean Squared Error: {mse:0.3f}')
+
+y_pred = model.predict(X_test)
+
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test, y_pred)
+print(r2)
+
+# Predicting RMSE the Test set results
+from sklearn.metrics import mean_squared_error
+rmse = (np.sqrt(mean_squared_error(y_test, y_pred)))
+print(rmse)
+

@@ -1,0 +1,120 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+from sklearn import model_selection
+from sklearn.preprocessing import StandardScaler,LabelEncoder, OneHotEncoder
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
+
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# from sklearn import preprocessing
+# from yellowbrick.classifier import ConfusionMatrix
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+df = pd.read_csv("/content/drive/MyDrive/College/DL/Assignment2/letter-recognition.data", sep = ",", header=None)
+
+df.head(10)
+
+names = ['letter_Class',
+         'x-box',
+         'y-box',
+         'width',
+         'high',
+         'onpix',
+         'x-bar',
+         'y-bar',
+         'x2bar',
+         'y2bar',
+         'xybar',
+         'x2ybr',
+         'xy2br',
+         'x-ege',
+         'xegvy',
+         'y-ege',
+         'yegvx']
+
+df.columns = names
+
+df.head(10)
+
+# X = df.iloc[:, 1 : 17]
+# Y = df.select_dtypes(include = [object])
+X = df.iloc[:, 1:].values
+y = df.iloc[:, 0].values
+
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(y)
+
+y
+
+onehot_encoder = OneHotEncoder(categories='auto')
+y = onehot_encoder.fit_transform(y.reshape(-1, 1)).toarray()
+
+y
+
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = Sequential()
+model.add(Dense(64, input_shape=(16,), activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(26, activation='softmax'))
+
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test))
+
+score = model.evaluate(X_test, y_test)
+print(f'Test loss: {score[0]}')
+print(f'Test accuracy: {score[1]}')
+
+# print(confusion_matrix(Y_test, predictions))
+y_pred = model.predict(X_test)
+y_pred = np.argmax(y_pred, axis=1)
+y_true = np.argmax(y_test, axis=1)
+cm = confusion_matrix(y_true, y_pred)
+print(cm)
+
+target_names = label_encoder.inverse_transform(np.arange(26))
+print(classification_report(y_true, y_pred, target_names=target_names))
+
+# create a new input with 16 feature values
+new_input = [[4,2,5,4,4,8,7,6,6,7,6,6,2,8,7,10]]
+
+# standardize the input using the scaler object
+new_input = scaler.transform(new_input)
+
+# make a prediction
+prediction = model.predict(new_input)
+
+# print the predicted letter
+val=np.argmax(prediction)
+
+print(chr(ord('A')+val))
+
+# create a new input with 16 feature values
+new_input = [[5,12,3,7,2,10,5,5,4,13,3,9,2,8,4,10]]
+
+# standardize the input using the scaler object
+new_input = scaler.transform(new_input)
+
+# make a prediction
+prediction = model.predict(new_input)
+
+# print the predicted letter
+val=np.argmax(prediction)
+
+print(chr(ord('A')+val))
