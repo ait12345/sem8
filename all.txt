@@ -1,4 +1,4 @@
-#housing
+                                                                                                                            #housing
 
 
 import numpy as np
@@ -137,7 +137,7 @@ print(rmse)
 
 
 
-#letter_recognigation_classification
+                                                                                                                      #letter_recognigation_classification
 
 
 import pandas as pd
@@ -264,7 +264,7 @@ print(chr(ord('A')+val))
 
 
 
-#IMDB
+                                                                                                                                    #IMDB
 #!pip install Keras-Preprocessing
 import numpy as np
 from keras import models, layers, optimizers
@@ -354,7 +354,7 @@ print(f"Review text: {text[4]}\n")
 print(f"Review : {predicted_sentiments[4]}")
 
 
-#fashion_cnn
+                                                                                                                             #fashion_cnn
 
 
 import numpy as np
@@ -480,7 +480,7 @@ Prediction : {:d}".format(y_test[index],y_pred[index]))
 plt.subplots_adjust(hspace=0.9, wspace=0.5)
 
 
-#rnn_stock_price
+                                                                                                                           #rnn_stock_price
 
 
 
@@ -647,7 +647,7 @@ print('RMSE in terms of % of the orignal value is', round((rmse/real_stock_price
 # we take the avg because it would be a true representative of the real stock values
 
 
-#bfs_dfs
+                                                                                                                                 #bfs_dfs
 
 #include<bits/stdc++.h>
 #include<omp.h>
@@ -777,7 +777,7 @@ int main() {
 }
 
 
-#bubble_sort_merge
+                                                                                                                     #bubble_sort_merge
 
 #include <bits/stdc++.h>
 #include <omp.h>
@@ -905,7 +905,7 @@ int main() {
 }
 
 
-#min_max_sum
+                                                                                                                           #min_max_sum
 
 
 #include <bits/stdc++.h>
@@ -970,7 +970,7 @@ Sample Input :
 
 */
 
-#CUDA
+                                                                                                                         #CUDAvectoradd
 
 #include <iostream>
 #include <vector>
@@ -1028,7 +1028,7 @@ int main() {
     return 0;
 }
 
-#matrix_multiplication
+                                                                                                                         #matrix_multiplication
 
 #include <iostream>
 #include <vector>
